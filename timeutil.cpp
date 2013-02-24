@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// arithmetic
+
 // calculate addition of positive arguments
 void add(const timeval& a, const timeval& b, timeval& result);
 
@@ -176,6 +178,48 @@ bool sub(const timeval& a, const timeval& b, timeval& result)
 	}
 	return negative;
 }
+
+// comparison
+
+bool operator==(const timeval& a, const timeval& b)
+{
+	return (a.tv_sec == b.tv_sec) && (a.tv_usec == b.tv_usec);
+}
+
+bool operator!=(const timeval& a, const timeval& b)
+{
+	return (a.tv_sec != b.tv_sec) || (a.tv_usec != b.tv_usec);
+}
+
+bool operator<(const timeval& a, const timeval& b)
+{
+	if (a.tv_sec == b.tv_sec)
+		return a.tv_usec < b.tv_usec;
+	return a.tv_sec < b.tv_sec;
+}
+
+bool operator>(const timeval& a, const timeval& b)
+{
+	if (a.tv_sec == b.tv_sec)
+		return a.tv_usec > b.tv_usec;
+	return a.tv_sec > b.tv_sec;
+}
+
+bool operator<=(const timeval& a, const timeval& b)
+{
+	if (a.tv_sec == b.tv_sec)
+		return a.tv_usec <= b.tv_usec;
+	return a.tv_sec < b.tv_sec;
+}
+
+bool operator>=(const timeval& a, const timeval& b)
+{
+	if (a.tv_sec == b.tv_sec)
+		return a.tv_usec >= b.tv_usec;
+	return a.tv_sec > b.tv_sec;
+}
+
+// 2string
 
 std::string toString(const timeval& t)
 {

@@ -33,7 +33,7 @@ $(timeutil_STATIC_LIB): $(timeutil_OBJ)
 
 timetest_OBJ = timetest.o
 
-timetest.o: timetest.cpp
+timetest.o: timetest.cpp timeutil.h
 
 $(timetest_BIN): $(timeutil_STATIC_LIB)
 timetest_LIBS = -L. -ltimeutil
@@ -41,12 +41,12 @@ timetest_LIBS = -L. -ltimeutil
 $(timetest_BIN): $(timetest_OBJ)
 	$(LINKER) $(LDFLAGS) -o $@ $(timetest_OBJ) $(timetest_LIBS)
 
+test: $(timetest_BIN)
+	./$(timetest_BIN)
+
 clean:
 	rm -f $(timeutil_STATIC_LIB) $(timeutil_OBJ)
 	rm -f $(timetest_BIN) $(timetest_OBJ)
-
-test: $(timetest_BIN)
-	./$(timetest_BIN)
 
 install: $(timeutil_STATIC_LIB)
 	cp timeutil.h $(includedir)

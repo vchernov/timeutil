@@ -8,6 +8,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// constructor
+
+timeval makeTimeval(__time_t sec, __suseconds_t usec)
+{
+	timeval t;
+	t.tv_sec = sec;
+	t.tv_usec = usec;
+	return t;
+}
+
+// 2string
+
+std::string toString(const timeval& t)
+{
+	bool negative = (t.tv_sec < 0) || (t.tv_usec < 0);
+	const char* sign = negative ? "-" : "";
+	char buffer[32];
+	sprintf(buffer, "%s%ld.%06ld", sign, labs(t.tv_sec), labs(t.tv_usec));
+	return buffer;
+}
+
 // arithmetic
 
 // calculate addition of positive arguments
@@ -229,17 +250,6 @@ bool operator>=(const timeval& a, const timeval& b)
 	if (a.tv_sec == b.tv_sec)
 		return a.tv_usec >= b.tv_usec;
 	return a.tv_sec > b.tv_sec;
-}
-
-// 2string
-
-std::string toString(const timeval& t)
-{
-	bool negative = (t.tv_sec < 0) || (t.tv_usec < 0);
-	const char* sign = negative ? "-" : "";
-	char buffer[32];
-	sprintf(buffer, "%s%ld.%06ld", sign, labs(t.tv_sec), labs(t.tv_usec));
-	return buffer;
 }
 
 // FpsCounter

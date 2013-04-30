@@ -10,6 +10,14 @@
 #ifndef TIMEUTIL_H_
 #define TIMEUTIL_H_
 
+// constructor
+
+timeval makeTimeval(__time_t sec, __suseconds_t usec);
+
+// 2string
+
+std::string toString(const timeval& t);
+
 // arithmetic
 
 timeval operator+(const timeval& a, const timeval& b);
@@ -29,10 +37,6 @@ bool operator>(const timeval& a, const timeval& b);
 bool operator<=(const timeval& a, const timeval& b);
 bool operator>=(const timeval& a, const timeval& b);
 
-// 2string
-
-std::string toString(const timeval& t);
-
 /**
  * Frames Per Second counter.
  */
@@ -46,7 +50,7 @@ public:
 	/// Set to initial state.
 	void reset();
 
-	/// Get counted FPS rounded to integer.
+	/// Get counted FPS rounded to nearest integer.
 	int framesPerSec() const;
 
 	/// Get counted FPS.

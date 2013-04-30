@@ -13,17 +13,26 @@ int main(int, char**)
 {
 	std::cout << "start time test" << std::endl;
 
+	// current time
+	timeval now;
+	gettimeofday(&now, NULL);
+	std::cout << "current time: " << toString(now) << std::endl;
+
+	// operators
+	assert(makeTimeval(1, 2) == makeTimeval(1, 2));
+	assert(makeTimeval(1, 2) != makeTimeval(0, 0));
+	assert(makeTimeval(1, 2) < makeTimeval(1, 2) + makeTimeval(0, 1));
+	assert(makeTimeval(1, 2) > makeTimeval(1, 2) - makeTimeval(0, 1));
+	assert(makeTimeval(1, 2) <= makeTimeval(3, 4));
+	assert(makeTimeval(1, 2) >= makeTimeval(1, 2));
+
+	// arithmetic
 	for (long a = -3000000; a <= 3000000; a += 10000)
 	{
 		for (long b = -3000000; b <= 3000000; b += 10000)
 		{
-			timeval ta;
-			ta.tv_sec = a / 1000000;
-			ta.tv_usec = a % 1000000;
-
-			timeval tb;
-			tb.tv_sec = b / 1000000;
-			tb.tv_usec = b % 1000000;
+			timeval ta = makeTimeval(a / 1000000, a % 1000000);
+			timeval tb = makeTimeval(b / 1000000, b % 1000000);
 
 			timeval tp = ta + tb;
 			long long pr = labs(tp.tv_sec) * 1000000 + labs(tp.tv_usec);

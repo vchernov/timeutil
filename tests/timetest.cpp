@@ -4,7 +4,8 @@
  * @author Vladimir Chernov <2chernov@gmail.com>
  */
 
-#include "timeutil.h"
+#include "../timeutil/timeutil.h"
+
 #include <stdlib.h>
 #include <iostream>
 #include <assert.h>

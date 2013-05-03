@@ -4,11 +4,17 @@ EXTRA_DIST = m4/NOTES
 lib_LTLIBRARIES = libtimeutil.la
 
 libtimeutil_la_SOURCES = \
+	timeutil/timeutil.h \
 	timeutil/timeutil.cpp \
-	timeutil/timeutil.h
+	timeutil/timevalops.h \
+	timeutil/timevalops.cpp \
+	timeutil/FpsCounter.h \
+	timeutil/FpsCounter.cpp
 
 nobase_include_HEADERS = \
-	timeutil/timeutil.h
+	timeutil/timeutil.h \
+	timeutil/timevalops.h \
+	timeutil/FpsCounter.h
 
 check_PROGRAMS = tests/timetest
 TESTS = $(check_PROGRAMS)

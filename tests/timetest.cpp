@@ -5,6 +5,7 @@
  */
 
 #include "../timeutil/timeutil.h"
+#include "../timeutil/timevalops.h"
 
 #include <stdlib.h>
 #include <iostream>
@@ -12,6 +13,8 @@
 
 int main(int, char**)
 {
+	using namespace timeutil;
+
 	std::cout << "start time test" << std::endl;
 
 	// current time

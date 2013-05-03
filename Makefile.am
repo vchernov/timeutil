@@ -15,4 +15,3 @@ TESTS = $(check_PROGRAMS)
 
 tests_timetest_SOURCES = tests/timetest.cpp
 tests_timetest_LDADD = libtimeutil.la
-

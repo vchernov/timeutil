@@ -1,34 +1,18 @@
-/**
- * @file timetest.cpp
- * @date Feb 6, 2013
- * @author Vladimir Chernov <2chernov@gmail.com>
- */
+#include <assert.h>
+#include <stdlib.h>
+#include <iostream>
 
 #include "../timeutil/timeutil.h"
 #include "../timeutil/timevalops.h"
-
-#include <stdlib.h>
-#include <iostream>
-#include <assert.h>
 
 int main(int, char**)
 {
 	using namespace timeutil;
 
-	std::cout << "start time test" << std::endl;
-
 	// current time
 	timeval now;
 	gettimeofday(&now, NULL);
 	std::cout << "current time: " << toString(now) << std::endl;
-
-	// operators
-	assert(makeTimeval(1, 2) == makeTimeval(1, 2));
-	assert(makeTimeval(1, 2) != makeTimeval(0, 0));
-	assert(makeTimeval(1, 2) < makeTimeval(1, 2) + makeTimeval(0, 1));
-	assert(makeTimeval(1, 2) > makeTimeval(1, 2) - makeTimeval(0, 1));
-	assert(makeTimeval(1, 2) <= makeTimeval(3, 4));
-	assert(makeTimeval(1, 2) >= makeTimeval(1, 2));
 
 	// arithmetic
 	for (long a = -3000000; a <= 3000000; a += 10000)
@@ -56,6 +40,5 @@ int main(int, char**)
 		}
 	}
 
-	std::cout << "time test complete" << std::endl;
 	return 0;
 }

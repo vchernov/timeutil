@@ -16,8 +16,11 @@ nobase_include_HEADERS = \
 	timeutil/timevalops.h \
 	timeutil/FpsCounter.h
 
-check_PROGRAMS = tests/timetest
+check_PROGRAMS = tests/comparison tests/arithmetic
 TESTS = $(check_PROGRAMS)
 
-tests_timetest_SOURCES = tests/timetest.cpp
-tests_timetest_LDADD = libtimeutil.la
+tests_comparison_SOURCES = tests/comparison.cpp
+tests_comparison_LDADD = libtimeutil.la
+
+tests_arithmetic_SOURCES = tests/arithmetic.cpp
+tests_arithmetic_LDADD = libtimeutil.la

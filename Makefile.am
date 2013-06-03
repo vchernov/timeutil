@@ -9,12 +9,15 @@ libtimeutil_la_SOURCES = \
 	timeutil/timevalops.h \
 	timeutil/timevalops.cpp \
 	timeutil/FpsCounter.h \
-	timeutil/FpsCounter.cpp
+	timeutil/FpsCounter.cpp \
+	timeutil/Timestamp.h \
+	timeutil/Timestamp.cpp
 
 nobase_include_HEADERS = \
 	timeutil/timeutil.h \
 	timeutil/timevalops.h \
-	timeutil/FpsCounter.h
+	timeutil/FpsCounter.h \
+	timeutil/Timestamp.h
 
 check_PROGRAMS = tests/comparison tests/arithmetic
 TESTS = $(check_PROGRAMS)

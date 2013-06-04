@@ -20,9 +20,6 @@
 #ifndef TIMESTAMP_H_
 #define TIMESTAMP_H_
 
-#include <stdio.h>
-#include <string>
-
 #include "timeutil.h"
 
 namespace timeutil
@@ -41,16 +38,12 @@ public:
 	static Timestamp now();
 
 	/**
-	 * Parse date and time values from string.
-	 * The text should be in format "year[4].month[2].day[2] hour[2]:minute[2]:second[2].usec[6]".
-	 * The usec part is not mandatory, all the other parameters must be included.
-	 * The separators can be any character.
-	 *
-	 * param[in]  str  Textual date and time.
-	 * param[out] ts   Result of the parsing.
-	 * return Success or not.
+	 * Parses time stamp from string.
+	 * @param[in]  str  Textual date and time.
+	 * @param[out] t    Result of the parsing.
+	 * @return Success or not.
 	 */
-	static bool parseDateTime(const char* str, Timestamp& t);
+	static bool parse(const char* str, Timestamp& t);
 
 	/**
 	 * @brief Default constructor.
@@ -60,11 +53,14 @@ public:
 	Timestamp();
 
 	/**
-	 * @brief Constructor with exact time values.
-	 * @param sec Amount of seconds.
-	 * @param usec Amount of microseconds.
+	 * Constructor from number of seconds and microseconds.
+	 * @param sec   Amount of seconds.
+	 * @param usec  Amount of microseconds.
 	 */
 	Timestamp(long sec, long usec = 0);
+
+	/// Constructor from time value.
+	Timestamp(const timeval& value);
 
 	bool operator==(const Timestamp& other) const;
 	bool operator!=(const Timestamp& other) const;
@@ -85,45 +81,48 @@ public:
 	long getUsec() const;
 	void setUsec(long usec);
 
-	/// Get seconds since the Unix Epoch (1970.01.01 00:00:00 UTC).
+	/// Gets seconds since the Unix Epoch (1970.01.01 00:00:00 UTC).
 	time_t getEpoch() const;
 
 	double toDouble() const;
 
 	bool isNull() const;
 
-	/// Serialization to file.
+	/// Serializes to file.
 	void write(FILE* f) const;
 
-	/// Loading from file.
+	/// Loads from file.
 	bool read(FILE* f);
 
-	/// Get Greenwich Mean broken-down time.
+	/// Gets Greenwich Mean broken-down time.
 	void getBrokenTimeGM(tm& brokenTime) const;
 
-	/// Get local broken-down time.
+	/// Gets local broken-down time.
 	void getBrokenTimeLocal(tm& brokenTime) const;
 
-	/// Convert to string in fixed-point format "sec.usec".
+	/// Converts to string in format "sec.usec".
 	std::string toStr() const;
 
-	/// Convert to string in format "hour:minute:second.usec".
+	/// Converts to string in format "hour:minute:second.usec".
 	std::string toStrTime() const;
 
-	/// Convert to string in format "hour:minute:second.usec" using Greenwich Mean time zone.
+	/// Converts to string in format "hour:minute:second.usec" using Greenwich Mean time zone.
 	std::string toStrTimeGM() const;
 
-	/// Convert to string in format "hour:minute:second.usec" using local time zone.
+	/// Converts to string in format "hour:minute:second.usec" using local time zone.
 	std::string toStrTimeLocal() const;
 
-	/// Convert to string in format "year.month.day hour:minute:second.usec".
+	/// Converts to string in format "year.month.day hour:minute:second.usec".
 	std::string toStrDateTime() const;
 
-	/// Convert to string in format "year.month.day hour:minute:second.usec" using Greenwich Mean time zone.
+	/// Converts to string in format "year.month.day hour:minute:second.usec" using Greenwich Mean time zone.
 	std::string toStrDateTimeGM() const;
 
-	/// Convert to string in format "year.month.day hour:minute:second.usec" using local time zone.
+	/// Converts to string in format "year.month.day hour:minute:second.usec" using local time zone.
 	std::string toStrDateTimeLocal() const;
+
+	/// The time value.
+	timeval value;
 
 private:
 	// amount of microseconds per one second (the value is 1^6 = 1000000)
@@ -131,11 +130,6 @@ private:
 
 	// coefficient to convert microseconds to decimal seconds
 	static const double usec2sec;
-
-	static std::string toStr(const tm& brokenTime, const char* fmt, //
-		const long* usec = NULL, const char* usecSep = ".");
-
-	timeval value;
 };
 
 } // namespace timeutil

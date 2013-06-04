@@ -19,9 +19,6 @@
 
 #include "Timestamp.h"
 
-#include <stdint.h>
-#include <string.h>
-
 #include "timevalops.h"
 
 namespace timeutil
@@ -34,41 +31,12 @@ const Timestamp Timestamp::null = Timestamp(0, 0);
 
 Timestamp Timestamp::now()
 {
-	Timestamp t;
-	gettimeofday(&t.value, NULL);
-	return t;
+	return Timestamp(getCurrentTime());
 }
 
-bool Timestamp::parseDateTime(const char* str, Timestamp& t)
+bool Timestamp::parse(const char* str, Timestamp& t)
 {
-	tm dateTime;
-	memset(&dateTime, 0, sizeof(tm));
-
-	long subSec;
-	int filled = sscanf(str, "%04d%*c%02d%*c%02d%*c%02d%*c%02d%*c%02d%*c%06ld", //
-		&dateTime.tm_year, &dateTime.tm_mon, &dateTime.tm_mday, //
-		&dateTime.tm_hour, &dateTime.tm_min, &dateTime.tm_sec, //
-		&subSec);
-	if (filled < 6)
-		return false;
-
-	dateTime.tm_mon -= 1;
-	dateTime.tm_year -= 1900;
-	if (dateTime.tm_year < 70)
-		dateTime.tm_year = 70;
-
-	time_t sec;
-	if (dateTime.tm_year == 70 && dateTime.tm_mon == 0 && dateTime.tm_mday == 1)
-		sec = dateTime.tm_hour * 60 * 60 + dateTime.tm_min * 60 + dateTime.tm_sec;
-	else
-		sec = timegm(&dateTime);
-	t.setSec(sec);
-
-	if (filled == 7)
-		t.setUsec(subSec);
-	else
-		t.setUsec(0);
-	return true;
+	return parseDateTime(str, t.value);
 }
 
 Timestamp::Timestamp()
@@ -77,8 +45,12 @@ Timestamp::Timestamp()
 
 Timestamp::Timestamp(long sec, long usec)
 {
-	value.tv_sec = sec;
-	value.tv_usec = usec;
+	value = makeTimeval(sec, usec);
+}
+
+Timestamp::Timestamp(const timeval& value) :
+	value(value)
+{
 }
 
 bool Timestamp::operator==(const Timestamp& other) const
@@ -125,12 +97,12 @@ Timestamp& Timestamp::operator-=(const Timestamp& other)
 
 const Timestamp Timestamp::operator+(const Timestamp& other) const
 {
-	return Timestamp(*this) += other;
+	return Timestamp(value + other.value);
 }
 
 const Timestamp Timestamp::operator-(const Timestamp& other) const
 {
-	return Timestamp(*this) -= other;
+	return Timestamp(value - other.value);
 }
 
 long Timestamp::getSec() const
@@ -160,41 +132,24 @@ time_t Timestamp::getEpoch() const
 
 double Timestamp::toDouble() const
 {
-	double t = (double)value.tv_sec;
-	t += (double)value.tv_usec * usec2sec;
+	double t = value.tv_sec;
+	t += value.tv_usec * usec2sec;
 	return t;
 }
 
 bool Timestamp::isNull() const
 {
-	return (value.tv_sec == 0) && (value.tv_usec == 0);
+	return *this == Timestamp::null;
 }
 
 void Timestamp::write(FILE* f) const
 {
-	// must be no difference in 32 and 64 bit systems
-
-	int64_t sec;
-	sec = value.tv_sec;
-	fwrite(&sec, sizeof(sec), 1, f);
-
-	int32_t usec;
-	usec = value.tv_usec;
-	fwrite(&usec, sizeof(usec), 1, f);
+	writeTimeval(f, value);
 }
 
 bool Timestamp::read(FILE* f)
 {
-	// must be no difference in 32 and 64 bit systems
-	int64_t sec;
-	int32_t usec;
-	if (fread(&sec, sizeof(sec), 1, f) != 1)
-		return false;
-	if (fread(&usec, sizeof(usec), 1, f) != 1)
-		return false;
-	value.tv_sec = sec;
-	value.tv_usec = usec;
-	return true;
+	return readTimeval(f, value);
 }
 
 void Timestamp::getBrokenTimeGM(tm& brokenTime) const
@@ -207,20 +162,6 @@ void Timestamp::getBrokenTimeLocal(tm& brokenTime) const
 {
 	time_t timer = getEpoch();
 	localtime_r(&timer, &brokenTime);
-}
-
-std::string Timestamp::toStr(const tm& brokenTime, const char* fmt, const long* usec, const char* usecSep)
-{
-	char buffer[64];
-	strftime(buffer, sizeof(buffer), fmt, &brokenTime);
-	if (usec != NULL)
-	{
-		char bufferExt[80];
-		sprintf(bufferExt, "%s%s%06ld", buffer, usecSep, *usec);
-		return bufferExt;
-	}
-	else
-		return buffer;
 }
 
 std::string Timestamp::toStr() const
@@ -237,14 +178,14 @@ std::string Timestamp::toStrTimeGM() const
 {
 	tm brokenTime;
 	getBrokenTimeGM(brokenTime);
-	return Timestamp::toStr(brokenTime, "%H:%M:%S", &value.tv_usec, ".");
+	return toString(brokenTime, "%H:%M:%S", &value.tv_usec, ".");
 }
 
 std::string Timestamp::toStrTimeLocal() const
 {
 	tm brokenTime;
 	getBrokenTimeLocal(brokenTime);
-	return Timestamp::toStr(brokenTime, "%H:%M:%S", &value.tv_usec, ".");
+	return toString(brokenTime, "%H:%M:%S", &value.tv_usec, ".");
 }
 
 std::string Timestamp::toStrDateTime() const
@@ -256,14 +197,14 @@ std::string Timestamp::toStrDateTimeGM() const
 {
 	tm brokenTime;
 	getBrokenTimeGM(brokenTime);
-	return Timestamp::toStr(brokenTime, "%Y.%m.%d %H:%M:%S", &value.tv_usec, ".");
+	return toString(brokenTime, "%Y.%m.%d %H:%M:%S", &value.tv_usec, ".");
 }
 
 std::string Timestamp::toStrDateTimeLocal() const
 {
 	tm brokenTime;
 	getBrokenTimeLocal(brokenTime);
-	return Timestamp::toStr(brokenTime, "%Y.%m.%d %H:%M:%S", &value.tv_usec, ".");
+	return toString(brokenTime, "%Y.%m.%d %H:%M:%S", &value.tv_usec, ".");
 }
 
 } // namespace timeutil

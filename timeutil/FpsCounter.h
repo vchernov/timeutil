@@ -45,14 +45,14 @@ public:
 	float framesPerSecReal() const;
 
 	/**
-	 * Recalculates counter by using the current system time.
+	 * Recalculates the counter by using the current system time.
 	 * This function should be invoked every iteration.
 	 * return Has the FPS been changed or not.
 	 */
 	bool update();
 
 	/**
-	 * Recalculates counter by using external time value.
+	 * Recalculates the counter by using external time value.
 	 * param[in] t The time of current iteration provided by user code.
 	 * return Has the FPS been changed or not.
 	 */

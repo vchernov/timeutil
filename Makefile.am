@@ -19,11 +19,20 @@ nobase_include_HEADERS = \
 	timeutil/FpsCounter.h \
 	timeutil/Timestamp.h
 
-check_PROGRAMS = tests/comparison tests/arithmetic
-TESTS = $(check_PROGRAMS)
+libtimeutil_la_LDFLAGS = -no-undefined \
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
-tests_comparison_SOURCES = tests/comparison.cpp
-tests_comparison_LDADD = libtimeutil.la
+TESTS = tests/arithmetic tests/runAllTests
+check_PROGRAMS = $(TESTS)
 
 tests_arithmetic_SOURCES = tests/arithmetic.cpp
 tests_arithmetic_LDADD = libtimeutil.la
+
+tests_runAllTests_SOURCES = \
+	tests/runAllTests.cpp \
+	tests/Timestamp_test.cpp
+tests_runAllTests_CXXFLAGS = $(CPPUNIT_CFLAGS)
+tests_runAllTests_LDFLAGS = $(CPPUNIT_LIBS) libtimeutil.la
+
+.PHONY: check-norun
+check-norun: $(check_PROGRAMS) 

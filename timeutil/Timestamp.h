@@ -43,7 +43,7 @@ public:
 	 * @param[out] t    Result of the parsing.
 	 * @return Success or not.
 	 */
-	static bool parse(const char* str, Timestamp& t);
+	static bool parse(const std::string& str, Timestamp& t);
 
 	/**
 	 * @brief Default constructor.
@@ -122,7 +122,7 @@ public:
 	std::string toStrDateTimeLocal() const;
 
 	/// The time value.
-	timeval value;
+	timeval value; // there is no reason to make it private
 
 private:
 	// amount of microseconds per one second (the value is 1^6 = 1000000)

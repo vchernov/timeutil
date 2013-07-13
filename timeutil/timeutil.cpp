@@ -81,9 +81,9 @@ std::string toString(const tm& brokenTime, const char* fmt, const long* usec, co
 	if (usec == NULL)
 		return buffer;
 
-	char bufferUsec[80];
-	sprintf(bufferUsec, "%s%s%06ld", buffer, usecSep, *usec);
-	return bufferUsec;
+	char bufferWithUsec[80];
+	sprintf(bufferWithUsec, "%s%s%06ld", buffer, usecSep, *usec);
+	return bufferWithUsec;
 }
 
 bool parseDateTime(const char* str, timeval& t)

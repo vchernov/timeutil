@@ -34,7 +34,7 @@ timeval getCurrentTime();
 /// Serializes timeval to file. 32 and 64 bit system independent.
 void writeTimeval(FILE* file, const timeval& t);
 
-/// Loads timeval saved by using this library.
+/// Loads timeval from file, saved by using this library.
 bool readTimeval(FILE* file, timeval& t);
 
 /// Converts timeval to string in fixed-point format "sec.usec".
@@ -45,9 +45,9 @@ std::string toString(const timeval& t);
  *
  * @param brokenTime  The broken-down time.
  * @param fmt         The format of the expected string.
- * @param usec        Microseconds (optional).
- * @param usecSep     Separation character between the time and microseconds (optional).
- * @return The string with date and time.
+ * @param usec        The microseconds (optional).
+ * @param usecSep     Separation character between the time and the microseconds (optional).
+ * @return The string with date and time information.
  */
 std::string toString(const tm& brokenTime, const char* fmt, //
 	const long* usec = NULL, const char* usecSep = ".");
@@ -85,8 +85,8 @@ std::string toString(const tm& brokenTime, const char* fmt, //
  * The usec part is optional, all the other parameters are mandatory.
  * The separators can be any character.
  *
- * param[in]  str  Textual date and time.
- * param[out] ts   Result of the parsing.
+ * param[in]  str  The textual date and time.
+ * param[out] t    The result of the parsing.
  * return Success or not.
  */
 bool parseDateTime(const char* str, timeval& t);

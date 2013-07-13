@@ -34,9 +34,9 @@ Timestamp Timestamp::now()
 	return Timestamp(getCurrentTime());
 }
 
-bool Timestamp::parse(const char* str, Timestamp& t)
+bool Timestamp::parse(const std::string& str, Timestamp& t)
 {
-	return parseDateTime(str, t.value);
+	return parseDateTime(str.c_str(), t.value);
 }
 
 Timestamp::Timestamp()

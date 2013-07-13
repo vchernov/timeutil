@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <stdlib.h>
-#include <iostream>
 
 #include "../timeutil/timeutil.h"
 #include "../timeutil/timevalops.h"
@@ -9,12 +8,7 @@ int main(int, char**)
 {
 	using namespace timeutil;
 
-	// current time
-	timeval now;
-	gettimeofday(&now, NULL);
-	std::cout << "current time: " << toString(now) << std::endl;
-
-	// arithmetic
+	// plus and minus operators check
 	for (long a = -3000000; a <= 3000000; a += 10000)
 	{
 		for (long b = -3000000; b <= 3000000; b += 10000)

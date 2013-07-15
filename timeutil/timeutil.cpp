@@ -108,7 +108,13 @@ bool parseDateTime(const char* str, timeval& t)
 	if (dateTime.tm_year == 70 && dateTime.tm_mon == 0 && dateTime.tm_mday == 1)
 		sec = dateTime.tm_hour * 60 * 60 + dateTime.tm_min * 60 + dateTime.tm_sec;
 	else
+	{
+#ifdef __WIN32__
+		sec = mktime(&dateTime) - timezone;
+#else
 		sec = timegm(&dateTime);
+#endif
+	}
 	t.tv_sec = sec;
 
 	if (filled == 7)

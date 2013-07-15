@@ -155,13 +155,23 @@ bool Timestamp::read(FILE* f)
 void Timestamp::getBrokenTimeGM(tm& brokenTime) const
 {
 	time_t timer = getEpoch();
+#ifdef __WIN32__
+	// less safe
+	brokenTime = *gmtime(&timer);
+#else
 	gmtime_r(&timer, &brokenTime);
+#endif
 }
 
 void Timestamp::getBrokenTimeLocal(tm& brokenTime) const
 {
 	time_t timer = getEpoch();
+#ifdef __WIN32__
+	// less safe
+	brokenTime = *localtime(&timer);
+#else
 	localtime_r(&timer, &brokenTime);
+#endif
 }
 
 std::string Timestamp::toStr() const

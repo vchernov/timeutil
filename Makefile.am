@@ -32,7 +32,8 @@ tests_runAllTests_SOURCES = \
 	tests/runAllTests.cpp \
 	tests/Timestamp_test.cpp
 tests_runAllTests_CXXFLAGS = $(CPPUNIT_CFLAGS)
-tests_runAllTests_LDFLAGS = $(CPPUNIT_LIBS) libtimeutil.la
+tests_runAllTests_LDFLAGS = $(CPPUNIT_LIBS)
+tests_runAllTests_LDADD = libtimeutil.la
 
 .PHONY: check-norun
 check-norun: $(check_PROGRAMS) 

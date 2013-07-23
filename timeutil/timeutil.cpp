@@ -19,12 +19,14 @@
 
 #include "timeutil.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 
 namespace timeutil
 {
+
+const long usecPerSec = 1000000;
 
 timeval makeTimeval(long sec, long usec)
 {
@@ -65,7 +67,13 @@ bool readTimeval(FILE* file, timeval& t)
 	return true;
 }
 
-std::string toString(const timeval& t)
+double timeval2double(const timeval& t)
+{
+	static double usec2sec = 1.0 / 1000000.0;
+	return (double)t.tv_sec + (double)t.tv_usec * usec2sec;
+}
+
+std::string timeval2string(const timeval& t)
 {
 	bool negative = (t.tv_sec < 0) || (t.tv_usec < 0);
 	const char* sign = negative ? "-" : "";
@@ -74,7 +82,7 @@ std::string toString(const timeval& t)
 	return buffer;
 }
 
-std::string toString(const tm& brokenTime, const char* fmt, const long* usec, const char* usecSep)
+std::string time2string(const tm& brokenTime, const char* fmt, const long* usec, const char* usecSep)
 {
 	char buffer[64];
 	strftime(buffer, sizeof(buffer), fmt, &brokenTime);

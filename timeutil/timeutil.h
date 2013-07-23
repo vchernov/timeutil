@@ -27,6 +27,9 @@
 namespace timeutil
 {
 
+/// Amount of microseconds per one second (the value is 10^6).
+extern const long usecPerSec;
+
 timeval makeTimeval(long sec, long usec);
 
 timeval getCurrentTime();
@@ -37,8 +40,11 @@ void writeTimeval(FILE* file, const timeval& t);
 /// Loads timeval from file, saved by using this library.
 bool readTimeval(FILE* file, timeval& t);
 
+/// Converts timeval to double precision floating point number.
+double timeval2double(const timeval& t);
+
 /// Converts timeval to string in fixed-point format "sec.usec".
-std::string toString(const timeval& t);
+std::string timeval2string(const timeval& t);
 
 /**
  * Converts broken-down time structure to string according to specified format.
@@ -49,7 +55,7 @@ std::string toString(const timeval& t);
  * @param usecSep     Separation character between the time and the microseconds (optional).
  * @return The string with date and time information.
  */
-std::string toString(const tm& brokenTime, const char* fmt, //
+std::string time2string(const tm& brokenTime, const char* fmt, //
 	const long* usec = NULL, const char* usecSep = ".");
 
 /*

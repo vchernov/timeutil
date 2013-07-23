@@ -11,6 +11,7 @@ Requirements
 Dependencies:
 * [The GNU C Library](http://www.gnu.org/software/libc/) (glibc). 
 Usually already installed on systems along with the GCC compiler suite.
+* [UnitTest++](http://unittest-cpp.sourceforge.net/) Unit testing framework. Not needed if you are not going to run "make check".
 
 
 Resources

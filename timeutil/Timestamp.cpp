@@ -24,9 +24,6 @@
 namespace timeutil
 {
 
-const long Timestamp::usecPerSec = 1000000;
-const double Timestamp::usec2sec = 1.0 / 1000000.0;
-
 const Timestamp Timestamp::null = Timestamp(0, 0);
 
 Timestamp Timestamp::now()
@@ -132,9 +129,7 @@ time_t Timestamp::getEpoch() const
 
 double Timestamp::toDouble() const
 {
-	double t = value.tv_sec;
-	t += value.tv_usec * usec2sec;
-	return t;
+	return timeval2double(value);
 }
 
 bool Timestamp::isNull() const
@@ -176,7 +171,7 @@ void Timestamp::getBrokenTimeLocal(tm& brokenTime) const
 
 std::string Timestamp::toStr() const
 {
-	return toString(value);
+	return timeval2string(value);
 }
 
 std::string Timestamp::toStrTime() const
@@ -188,14 +183,14 @@ std::string Timestamp::toStrTimeGM() const
 {
 	tm brokenTime;
 	getBrokenTimeGM(brokenTime);
-	return toString(brokenTime, "%H:%M:%S", &value.tv_usec, ".");
+	return time2string(brokenTime, "%H:%M:%S", &value.tv_usec, ".");
 }
 
 std::string Timestamp::toStrTimeLocal() const
 {
 	tm brokenTime;
 	getBrokenTimeLocal(brokenTime);
-	return toString(brokenTime, "%H:%M:%S", &value.tv_usec, ".");
+	return time2string(brokenTime, "%H:%M:%S", &value.tv_usec, ".");
 }
 
 std::string Timestamp::toStrDateTime() const
@@ -207,14 +202,14 @@ std::string Timestamp::toStrDateTimeGM() const
 {
 	tm brokenTime;
 	getBrokenTimeGM(brokenTime);
-	return toString(brokenTime, "%Y.%m.%d %H:%M:%S", &value.tv_usec, ".");
+	return time2string(brokenTime, "%Y.%m.%d %H:%M:%S", &value.tv_usec, ".");
 }
 
 std::string Timestamp::toStrDateTimeLocal() const
 {
 	tm brokenTime;
 	getBrokenTimeLocal(brokenTime);
-	return toString(brokenTime, "%Y.%m.%d %H:%M:%S", &value.tv_usec, ".");
+	return time2string(brokenTime, "%Y.%m.%d %H:%M:%S", &value.tv_usec, ".");
 }
 
 } // namespace timeutil

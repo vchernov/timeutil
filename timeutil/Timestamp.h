@@ -123,13 +123,6 @@ public:
 
 	/// The time value.
 	timeval value; // there is no reason to make it private
-
-private:
-	// amount of microseconds per one second (the value is 1^6 = 1000000)
-	static const long usecPerSec;
-
-	// coefficient to convert microseconds to decimal seconds
-	static const double usec2sec;
 };
 
 } // namespace timeutil

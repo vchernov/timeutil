@@ -22,18 +22,16 @@ nobase_include_HEADERS = \
 libtimeutil_la_LDFLAGS = -no-undefined \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
-TESTS = tests/arithmetic tests/runAllTests
+TESTS = tests/runAllTests
 check_PROGRAMS = $(TESTS)
-
-tests_arithmetic_SOURCES = tests/arithmetic.cpp
-tests_arithmetic_LDADD = libtimeutil.la
 
 tests_runAllTests_SOURCES = \
 	tests/runAllTests.cpp \
-	tests/Timestamp_test.cpp
-tests_runAllTests_CXXFLAGS = $(CPPUNIT_CFLAGS)
-tests_runAllTests_LDFLAGS = $(CPPUNIT_LIBS)
-tests_runAllTests_LDADD = libtimeutil.la
+	tests/ArithmeticTests.cpp \
+	tests/StringTests.cpp \
+	tests/OperatorTests.cpp
+	
+tests_runAllTests_LDADD = libtimeutil.la -lUnitTest++
 
 .PHONY: check-norun
 check-norun: $(check_PROGRAMS) 

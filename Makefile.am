@@ -30,8 +30,9 @@ tests_runAllTests_SOURCES = \
 	tests/ArithmeticTests.cpp \
 	tests/StringTests.cpp \
 	tests/OperatorTests.cpp
-	
-tests_runAllTests_LDADD = libtimeutil.la -lUnitTest++
+
+tests_runAllTests_CXXFLAGS = $(UNITTEST_CFLAGS)
+tests_runAllTests_LDADD = libtimeutil.la $(UNITTEST_LIBS)
 
 .PHONY: check-norun
-check-norun: $(check_PROGRAMS) 
+check-norun: $(check_PROGRAMS)

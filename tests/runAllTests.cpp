@@ -1,6 +1,5 @@
-#include <UnitTest++/UnitTest++.h>
+#include <UnitTest++.h>
 
-int main(int, char**)
-{
-	return UnitTest::RunAllTests();
+int main(int, char**) {
+    return UnitTest::RunAllTests();
 }
